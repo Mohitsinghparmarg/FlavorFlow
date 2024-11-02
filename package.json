@@ -1,0 +1,34 @@
+{
+  "name": "restaurant",
+  "version": "1.0.0",
+  "description": "food ordering app",
+  "scripts": {
+    "start": "parcel index.html",
+    "build": "parcel build index.html",
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mohitsinghparmarg/FlavorFlow.git"
+  },
+  "author": "mohit",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mohitsinghparmarg/FlavorFlow/issues"
+  },
+  "homepage": "https://github.com/Mohitsinghparmarg/FlavorFlow#readme",
+  "devDependencies": {
+    "parcel": "^2.12.0",
+    "postcss": "^8.4.47",
+    "process": "^0.11.10",
+    "tailwindcss": "^3.4.14"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.27.0"
+  },
+  "browserslist": [
+    "last 2 versions"
+  ]
+}
