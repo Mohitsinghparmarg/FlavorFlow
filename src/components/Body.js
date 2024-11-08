@@ -20,17 +20,19 @@ const Body = () => {
 
   const fetchData = async () => {
     try {
-      const data = await fetch(RES_LIST);
-      const json = await data.json();
+      const response = await fetch(RES_LIST);
+      if (!response.ok) throw new Error("Network response was not ok");
+      const json = await response.json();
       const restaurants = json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants || [];
       setListOfRestaurant(restaurants);
       setFilteredRestaurant(restaurants);
     } catch (error) {
-      setError("Failed to load restaurants.");
+      setError("Failed to load restaurants. Please try again.");
     } finally {
       setLoading(false);
     }
   };
+  console.log(ListOfRestaurant)
 
   const handleSearch = useCallback(() => {
     const filtered = ListOfRestaurant.filter((res) =>
@@ -53,7 +55,14 @@ const Body = () => {
   }
 
   if (error) {
-    return <p className="text-red-500 font-semibold">{error}</p>;
+    return (
+      <div>
+        <p className="text-red-500 font-semibold">{error}</p>
+        <button onClick={fetchData} className="mt-4 p-2 text-white bg-blue-500 rounded">
+          Retry
+        </button>
+      </div>
+    );
   }
 
   return (
