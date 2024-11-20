@@ -1,10 +1,11 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useContext } from "react";
 import { RestaurantCard } from "./RestaurantCard";
 import Shimmer from "./Shimmer";
 import { Link } from "react-router-dom";
 import { RES_LIST } from "../utills/constant";
 import { useOnlineStatus } from "../utills/useOnlineStatus";
 import { OfflineGame } from "./OfflineGame";
+import { UserContext } from "../utills/UserContext";
 
 const Body = () => {
   const [ListOfRestaurant, setListOfRestaurant] = useState([]);
@@ -13,6 +14,8 @@ const Body = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const onlineStatus = useOnlineStatus();
+
+  const { loggedInUser, setUserName } = useContext(UserContext);
 
   useEffect(() => {
     fetchData();
@@ -23,7 +26,8 @@ const Body = () => {
       const response = await fetch(RES_LIST);
       if (!response.ok) throw new Error("Network response was not ok");
       const json = await response.json();
-      const restaurants = json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants || [];
+      const restaurants =
+        json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants || [];
       setListOfRestaurant(restaurants);
       setFilteredRestaurant(restaurants);
     } catch (error) {
@@ -32,7 +36,6 @@ const Body = () => {
       setLoading(false);
     }
   };
-  console.log(ListOfRestaurant)
 
   const handleSearch = useCallback(() => {
     const filtered = ListOfRestaurant.filter((res) =>
@@ -42,9 +45,18 @@ const Body = () => {
   }, [ListOfRestaurant, searchText]);
 
   const filterTopRated = useCallback(() => {
+    setSearchText(""); // Reset search text
     const topRated = ListOfRestaurant.filter((res) => res.info.avgRating >= 4.5);
     setFilteredRestaurant(topRated);
   }, [ListOfRestaurant]);
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      handleSearch();
+    }, 300); // Debounce for search
+
+    return () => clearTimeout(timeoutId);
+  }, [searchText, handleSearch]);
 
   if (!onlineStatus) {
     return <OfflineGame />;
@@ -56,9 +68,12 @@ const Body = () => {
 
   if (error) {
     return (
-      <div>
+      <div className="text-center">
         <p className="text-red-500 font-semibold">{error}</p>
-        <button onClick={fetchData} className="mt-4 p-2 text-white bg-blue-500 rounded">
+        <button
+          onClick={fetchData}
+          className="mt-4 px-6 py-2 text-white bg-blue-500 rounded shadow hover:bg-blue-600 transition"
+        >
           Retry
         </button>
       </div>
@@ -92,10 +107,22 @@ const Body = () => {
         >
           Top Rated Restaurants
         </button>
+        {setUserName && (
+          <div className="m-4 p-4 flex items-center">
+            <label className="mr-2">UserName:</label>
+            <input
+              className="border border-black p-2"
+              placeholder="Enter username"
+              onChange={(e) => setUserName(e.target.value)}
+            />
+          </div>
+        )}
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredRestaurant.length === 0 ? (
-          <p className="text-gray-500 text-center">No restaurants found</p>
+          <p className="text-gray-500 text-center" aria-live="polite">
+            No restaurants found
+          </p>
         ) : (
           filteredRestaurant.map((restaurant) => (
             <Link

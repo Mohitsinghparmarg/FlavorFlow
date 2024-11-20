@@ -28,7 +28,7 @@ export class UserClassBased extends React.Component {
               userInfo : json,
             });
 
-            console.log(json);
+           // console.log(json);
 
     }
 
@@ -37,12 +37,12 @@ export class UserClassBased extends React.Component {
         // this.timer = setInterval(() =>{
         //      console.log("it will be called multiple times");
         //  },1000);
-          console.log("component did updated");
+         // console.log("component did updated");
       }
    
    componentWillUnmount(){
     clearInterval(this.timer);
-         console.log("component will unmount");
+        // console.log("component will unmount");
    }
 
 

@@ -1,4 +1,6 @@
+import { useContext } from "react";
 import { CDN_URL } from "../utills/constant";
+import { UserContext } from "../utills/UserContext";
 
 export const RestaurantCard = ({ restaurants }) => {
   const {
@@ -9,6 +11,8 @@ export const RestaurantCard = ({ restaurants }) => {
     costForTwo,
     sla: { deliveryTime } = {},
   } = restaurants?.info || {};
+
+  const { loggedInUser } = useContext(UserContext);
 
   return (
     <div className="res-card w-full max-w-[260px] p-5 rounded-lg bg-[#f7f7f7] shadow-lg flex flex-col items-center transition-transform duration-300 hover:scale-105 hover:shadow-xl mx-auto">
@@ -26,6 +30,7 @@ export const RestaurantCard = ({ restaurants }) => {
         </div>
         <p className="text-md text-gray-600 mt-1">{costForTwo}</p>
         <p className="text-md text-gray-600 mt-1">{deliveryTime} minutes</p>
+        <p>User:{loggedInUser}</p>
       </div>
     </div>
   );

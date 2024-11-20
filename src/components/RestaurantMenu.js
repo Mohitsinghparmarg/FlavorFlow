@@ -8,7 +8,7 @@ const RestaurantMenu = () => {
   const { resId } = useParams();
   const resInfo = useRestaurantMenu(resId);
 
-  const [showIndex, setShowIndex] = useState(0);
+  const [showIndex, setShowIndex] = useState(null); // Initialize with null for no category expanded
 
   if (!resInfo) return <Shimmer />;
 
@@ -24,13 +24,13 @@ const RestaurantMenu = () => {
       <h1 className="font-bold my-6 text-2xl">{name}</h1>
       <h2 className="font-bold text-lg">{cuisines.join(", ")}</h2>
       <h3 className="font-bold text-lg">{costForTwoMessage}</h3>
-      
+
       {categories.map((category, index) => (
         <RestaurantCategory
           key={category?.card?.card?.title}
           data={category.card.card}
-          showItems={index === showIndex ? true : false}
-          setShowIndex = {() => setShowIndex(index)}
+          showItems={index === showIndex}
+          setShowIndex={() => setShowIndex(index === showIndex ? null : index)} // Toggle the category
         />
       ))}
     </div>
