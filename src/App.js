@@ -6,6 +6,8 @@ import Body from "./components/Body";
 import Error from "./components/Error";
 import  Shimmer  from "./components/Shimmer";
 import { UserContext } from "./utills/UserContext";
+import { Provider } from "react-redux";
+import { appStore } from "./utills/appStore";
 
 const Grocery = lazy(() => import("./components/Grocery"));
 const About   = lazy(() => import("./components/About"))
@@ -26,12 +28,14 @@ const AppLayOut = () => {
   },[]);
 
   return (
-    <UserContext.Provider value={{loggedInUser : Username,setUserName}}>
+     <Provider store={appStore}>
+         <UserContext.Provider value={{loggedInUser : Username,setUserName}}>
         <div className="app">
           <Header />
           <Outlet />
         </div>
     </UserContext.Provider>
+     </Provider>
   );
 };
 

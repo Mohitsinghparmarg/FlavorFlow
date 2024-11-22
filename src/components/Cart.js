@@ -1,18 +1,44 @@
+import { useDispatch, useSelector } from "react-redux";
+import ItemList from "./ItemList";
+import { clearCart } from "../utills/cartSlice";
 
 const Cart = () => {
+  const cartItems = useSelector((store) => store.cart.items);
+  const dispatch = useDispatch();
 
-  
+  const handleClearCart = () => {
+    dispatch(clearCart());
+  };
 
-    return (
-        <div className="h-screen flex flex-col justify-center items-center bg-gradient-to-br from-[#ff4b2b] to-[#fc8019] p-5 text-center">
-            <h1 className="text-4xl md:text-5xl text-white font-bold m-0 text-shadow-lg bg-[#fc8019] py-5 px-10 rounded-2xl shadow-lg inline-block mt-5 transition-transform duration-300 ease-in-out hover:translate-y-[-5px] hover:shadow-2xl">
-                Cart Landing Page
-            </h1>
-            <button className="bg-white text-[#fc8019] border-2 border-[#fc8019] py-3 px-6 text-xl rounded-lg cursor-pointer mt-8 transition-colors duration-300 ease-in-out hover:bg-[#fc8019] hover:text-white">
-                Checkout
-            </button>
-        </div>
-    );
+  return (
+    <div
+      className="cart-container text-center m-4 p-4 min-h-screen flex flex-col items-center justify-center"
+      style={{
+        background: "linear-gradient(to bottom, #e8faff, #f7f6ff)",
+      }}
+    >
+      <h1 className="text-3xl font-bold mb-6 text-gray-800">Cart</h1>
+
+      <div className="cart-content w-4/12 bg-white shadow-md rounded-lg p-6">
+      
+        <button
+          className="clear-cart-btn w-full p-2 mb-4 bg-blue-100 border border-blue-300 rounded-lg hover:bg-blue-200 transition text-blue-800 font-semibold"
+          onClick={handleClearCart}
+        >
+          Clear Cart
+        </button>
+
+      
+        {cartItems.length === 0 ? (
+          <h2 className="empty-cart-message text-lg mt-4 text-gray-600">
+            Your cart is empty. Please add items to your cart.
+          </h2>
+        ) : (
+          <ItemList items={cartItems} />
+        )}
+      </div>
+    </div>
+  );
 };
 
 export default Cart;
